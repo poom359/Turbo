@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMz3LgiY1hGpFELjPaT4dA23I3sU7H7P8N/Tf2" crossorigin="anonymous">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4a90e2;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #f0f0f0;
+      border-radius: 4px;
+      margin-right: 10px;
+      transition: background 0.3s;
+    }
+
+    .tab.active {
+      background: #4a90e2;
+      color: white;
+    }
+
+    .form-group {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .form-group input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    .form-group button {
+      padding: 10px;
+      background: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .form-group button:hover {
+      background: #357ab8;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f9f9f9;
+    }
+
+    .task button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: #4a90e2;
+    }
+
+    .task button:hover {
+      color: #357ab8;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>TODOS</h1>
+
+  <div class="tabs">
+    <div class="tab active">Incomplete</div>
+    <div class="tab">Complete</div>
+  </div>
+
+  <div class="form-group">
+    <%= form_with model: @task, local: true do |form| %>
+      <%= form.text_field :title, placeholder: "Name", class: "form-control" %>
+      <%= form.submit 'Create Todo', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+
+  <h2>Incomplete Tasks</h2>
+  <div id="incomplete-tasks">
+    <% @incomplete_tasks.each do |task| %>
+      <div class="task">
+        <span><%= task.title %></span>
+        <%= button_to '✔️', complete_task_path(task), method: :patch, class: 'complete-task', form: { class: 'button-to' } %>
+        <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
+      </div>
+    <% end %>
+  </div>
+
+  <h2>Complete Tasks</h2>
+  <div id="complete-tasks">
+    <% @complete_tasks.each do |task| %>
+      <div class="task">
+        <span><%= task.title %></span>
+        <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+</body>
+</html>
