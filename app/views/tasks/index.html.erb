@@ -76,6 +76,30 @@
       background: #357ab8;
     }
 
+    .category-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .category {
+      flex: 1;
+      margin-right: 20px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .category h2 {
+      text-align: center;
+      color: #4a90e2;
+    }
+
+    .tasks {
+      margin-top: 10px;
+    }
+
     .task {
       display: flex;
       justify-content: space-between;
@@ -84,7 +108,7 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      background: #f9f9f9;
+      background: #fff;
     }
 
     .task button {
@@ -111,27 +135,46 @@
 
   <div class="form-group">
     <%= form_with model: @task, local: true do |form| %>
-      <%= form.text_field :title, placeholder: "Name", class: "form-control" %>
+      <%= form.text_field :title, placeholder: "Task Name", class: "form-control" %>
+      <%= form.collection_select :task_category_id, @task_categories, :id, :name, prompt: "Select a category", class: "form-control" %>
       <%= form.submit 'Create Todo', class: 'btn btn-primary' %>
     <% end %>
   </div>
 
   <h2>Incomplete Tasks</h2>
-  <div id="incomplete-tasks">
-    <% @incomplete_tasks.each do |task| %>
-      <div class="task">
-        <span><%= task.title %></span>
-        <%= button_to '✔️', complete_task_path(task), method: :patch, class: 'complete-task', form: { class: 'button-to' } %>
-        <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
+  <div class="category-container">
+    <div class="category">
+      <h2>Work</h2>
+      <div class="tasks">
+        <% @work_tasks.each do |task| %>
+          <div class="task">
+            <span><%= task.title %> (Category: <%= task.task_category.name %>)</span>
+            <%= button_to '✔️', complete_task_path(task), method: :patch, class: 'complete-task', form: { class: 'button-to' } %>
+            <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
+
+    <div class="category">
+      <h2>Personal</h2>
+      <div class="tasks">
+        <% @personal_tasks.each do |task| %>
+          <div class="task">
+            <span><%= task.title %> (Category: <%= task.task_category.name %>)</span>
+            <%= button_to '✔️', complete_task_path(task), method: :patch, class: 'complete-task', form: { class: 'button-to' } %>
+            <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <h2>Complete Tasks</h2>
   <div id="complete-tasks">
     <% @complete_tasks.each do |task| %>
       <div class="task">
-        <span><%= task.title %></span>
+        <span><%= task.title %> (Category: <%= task.task_category.name %>)</span>
         <%= button_to '🗑️', task, method: :delete, data: { confirm: "Are you sure?" }, class: 'delete-task' %>
       </div>
     <% end %>

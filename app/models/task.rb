@@ -1,14 +1,5 @@
 class Task < ApplicationRecord
-    STATUSES = { incomplete: 'incomplete', complete: 'complete' }
-  
-    validates :status, inclusion: { in: STATUSES.values }
-  
-    before_create :set_default_status
-  
-    private
-  
-    def set_default_status
-      self.status ||= STATUSES[:incomplete]
-    end
-  end
-  
+  belongs_to :task_category  # เปลี่ยนจาก category เป็น task_category
+  validates :title, presence: true
+  validates :status, inclusion: { in: %w[incomplete complete] }
+end
